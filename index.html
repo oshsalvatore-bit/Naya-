@@ -52,45 +52,6 @@
     }
     .btn:hover { background: #0096c7; }
     .btn:active { transform: scale(0.98); }
-    .status {
-      margin-top: 14px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #4ade80;
-      min-height: 22px;
-    }
-    .steps {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid #334155;
-      text-align: left;
-      font-size: 0.88rem;
-      color: #94a3b8;
-      line-height: 1.55;
-    }
-    .steps strong { color: #e2e8f0; }
-    .manual-box {
-      margin-top: 18px;
-      text-align: left;
-    }
-    .manual-box summary {
-      cursor: pointer;
-      font-size: 0.85rem;
-      color: #38bdf8;
-      margin-bottom: 8px;
-    }
-    textarea {
-      width: 100%;
-      height: 160px;
-      background: #0f172a;
-      color: #e2e8f0;
-      border: 1px solid #334155;
-      border-radius: 8px;
-      padding: 10px;
-      font-size: 0.8rem;
-      font-family: inherit;
-      resize: vertical;
-    }
   </style>
 </head>
 <body>
@@ -98,25 +59,19 @@
   <div class="card">
     <h1>Relocate Naya: Send Official Appeal</h1>
     <p class="subtitle">
-      Tap the button below to copy the full bilingual appeal letter (English + Russian) and open your email app addressed to Moskvarium leadership.
+      Tap the button below to open your email app with the recipients, subject, and letter pre-filled. Just sign your name and hit Send.
     </p>
 
-    <button class="btn" onclick="sendEmail()">
-      1. Copy Letter &amp; Open Email App
+    <button class="btn" onclick="openPrefilledEmail()">
+      Send Email to Moskvarium
     </button>
+  </div>
 
-    <div id="status" class="status"></div>
-
-    <div class="steps">
-      <strong>How to send:</strong><br />
-      1. Tap the button above — the full letter is automatically copied to your clipboard and your Mail app will open.<br />
-      2. Tap inside the blank email body and select <strong>Paste</strong>.<br />
-      3. Fill in your name/country at the bottom and hit <strong>Send</strong>.
-    </div>
-
-    <details class="manual-box">
-      <summary>View / Copy Full Letter Manually</summary>
-      <textarea id="letterText" readonly>Dear Moskvarium Directorate, Scientific Department, and Marine Mammal Care Team,
+  <script>
+    function openPrefilledEmail() {
+      const recipients = "info@moskvarium.ru,science@moskvarium.ru,pr@moskvarium.ru";
+      const subject = "Urgent Welfare Consultation: Social Relocation Options for Naya (Orcinus orca) / Срочное обращение: вопрос социального перевода косатки Наи";
+      const body = `Dear Moskvarium Directorate, Scientific Department, and Marine Mammal Care Team,
 
 I am writing to formally urge your immediate attention and intervention regarding the critical situation of Naya, the solitary female killer whale (Orcinus orca) currently held at the Moskvarium facility in Moscow, Russia.
 
@@ -207,38 +162,9 @@ Sincerely,
 
 [Your Name]
 [Your City, Country]
-[Your Email / Contact Information]</textarea>
-    </details>
-  </div>
+[Your Email / Contact Information]`;
 
-  <script>
-    function sendEmail() {
-      const textBox = document.getElementById("letterText");
-      const statusEl = document.getElementById("status");
-      const recipients = "info@moskvarium.ru,science@moskvarium.ru,pr@moskvarium.ru";
-      const subject = encodeURIComponent(
-        "Urgent Welfare Consultation: Social Relocation Options for Naya (Orcinus orca) / Срочное обращение: вопрос социального перевода косатки Наи"
-      );
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(textBox.value).then(() => {
-          statusEl.textContent = "✓ Full letter copied! Opening your email app...";
-          window.location.href = `mailto:${recipients}?subject=${subject}`;
-        }).catch(() => {
-          fallbackCopy(textBox, statusEl, recipients, subject);
-        });
-      } else {
-        fallbackCopy(textBox, statusEl, recipients, subject);
-      }
-    }
-
-    function fallbackCopy(textBox, statusEl, recipients, subject) {
-      textBox.parentElement.open = true;
-      textBox.select();
-      textBox.setSelectionRange(0, 99999);
-      document.execCommand("copy");
-      statusEl.textContent = "✓ Full letter copied! Opening your email app...";
-      window.location.href = `mailto:${recipients}?subject=${subject}`;
+      window.location.href = `mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
   </script>
 
